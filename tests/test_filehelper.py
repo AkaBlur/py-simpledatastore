@@ -84,9 +84,6 @@ def test_write_file(EmptyDirectory: pathlib.Path):
     ]
 
     _filehelper.create_file(EmptyDirectory, testFile)
-
-    assert (testFile.exists() and testFile.is_file())
-
     _filehelper.write_file(EmptyDirectory / testFile, testLines)
 
     readLines = []
@@ -104,8 +101,41 @@ def test_write_file(EmptyDirectory: pathlib.Path):
     assert (readLines == testLines)
 
 
+# append to file
+def test_append_file(EmptyDirectory: pathlib.Path):
+    testFile = pathlib.Path("testing.dat")
+    testLines = [
+        "This",
+        "is",
+        "a",
+        "test",
+        "\t42"
+    ]
+
+    _filehelper.create_file(EmptyDirectory, testFile)
+    _filehelper.write_file(EmptyDirectory / testFile, testLines)
+
+    anotherLine = "Appendix"
+    
+    _filehelper.append_file_lines(EmptyDirectory / testFile, [anotherLine])
+
+    readLines = []
+
+    with open(testFile, "r") as file:
+        line = file.readline().strip("\n")
+
+        while line:
+            readLines.append(line)
+
+            line = file.readline().strip("\n")
+
+    os.remove(testFile)
+
+    assert (readLines == (testLines + [anotherLine]))
+
+
 # read from file
-def test_write_file(EmptyDirectory: pathlib.Path):
+def test_read_file(EmptyDirectory: pathlib.Path):
     testFile = pathlib.Path("testing.dat")
     testLines = [
         "This",
@@ -141,7 +171,7 @@ def test_remove_path(NewDirectory: pathlib.Path):
 
 
 # list path files
-def test_remove_path(NewDirectory: pathlib.Path):
+def test_list_path_items(NewDirectory: pathlib.Path):
     testFileList = [
         pathlib.Path("testing-first-file.dat"),
         pathlib.Path("testing-second-file.dat"),

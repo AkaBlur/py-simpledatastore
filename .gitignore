@@ -1,4 +1,12 @@
+# python testing
 .pytest_cache
+# python venv
 .venv
-__pycache__
+# python compiled files (intermediates)
 .pyc
+__pycache__
+# testing directory
+dir-for-testing
+# coverage reports
+.coverage
+htmlcov

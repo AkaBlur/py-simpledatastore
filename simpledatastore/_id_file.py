@@ -10,6 +10,7 @@ Holds all currently stored IDs of all stored file objects
 
     Parameters:
         storePath (pathlib.Path): path where the ID file should be stored
+            ! needs to exist !
 """
 class IDFile:
     __storePath: pathlib.Path
@@ -21,7 +22,7 @@ class IDFile:
 
         _filehelper.create_file(
             storePath = self.__storePath,
-            fname = self.__IDFile)
+            fname = self.__IDFile.name)
         
 
     """
@@ -38,6 +39,8 @@ class IDFile:
         for line in lines:
             ids.append(int(line))
 
+        return ids
+
 
     """
     Writes an ID to the ID file if it's not already present
@@ -48,7 +51,7 @@ class IDFile:
     def write_ID(self, id: int):
         ids = self.read_IDs()
 
-        if id in ids:
+        if ids and id in ids:
             raise KeyError("ID already present in ID-File!")
 
         _filehelper.append_file_lines(self.__IDFile, [str(id)])
