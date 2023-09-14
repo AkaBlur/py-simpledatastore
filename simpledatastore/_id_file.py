@@ -48,7 +48,7 @@ class IDFile:
         Parameters:
             id (int): unique identifier that should be written to the ID file
     """
-    def write_ID(self, id: int):
+    def add_ID(self, id: int):
         ids = self.read_IDs()
 
         if ids and id in ids:
@@ -73,3 +73,32 @@ class IDFile:
             ids.remove(id)
         
         _filehelper.write_file(self.__IDFile, [str(el) for el in ids])
+
+
+    """
+    Removes all IDs from the ID file
+    """
+    def purge_IDs(self):
+        _filehelper.write_file(self.__IDFile, [""])
+
+    
+    """
+    Checks whether the file is in a correct state
+     - No doubles allowed
+    """
+    def check_integrity(self):
+        # IDs inside ID file
+        idFileIDs = self.read_IDs()
+
+        # check for doubles and remove them from the list
+        tmp = list(set(idFileIDs))
+        for el in set(idFileIDs):
+            if idFileIDs.count(el) > 1:
+                tmp.remove(el)
+
+        idFileIDs = tmp
+
+        self.purge_IDs()
+        
+        for id in idFileIDs:
+            self.add_ID(id)

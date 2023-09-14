@@ -98,7 +98,18 @@ def create_file(storePath: pathlib.Path, fname: pathlib.Path):
     if storePath.exists() and not fPath.exists():
         file = open(fPath, "w")
         file.close()
-        
+
+
+"""
+Deletes a single file
+
+    Parameters:
+        path (pathlib.Path): file to be removed
+"""
+def del_file(path: pathlib.Path):
+    if path.exists() and path.is_file():
+        os.remove(path = path)
+
 
 """
 Deletes a directory and its contents
@@ -112,7 +123,7 @@ def del_path(path: pathlib.Path):
 
 
 ##################################################################
-##################### FILE AND DIRECTORY I/O #####################
+#################### FILE AND DIRECTORY STAT #####################
 ##################################################################
 """
 List all files inside a directory
