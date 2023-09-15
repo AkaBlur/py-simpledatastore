@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import os
 import pathlib
+import re
 import shutil
 
 
@@ -132,8 +133,7 @@ List all files inside a directory
         path (pathlib.Path): path that should be searched
 
     Returns:
-        list[pathlib.Path]: list of all files found inside given directory
-            ! list contains only the name of the file !
+        list[str]: list of all files found inside given directory
 """
 def list_dir_files(path: pathlib.Path) -> list[pathlib.Path]:
     pathFiles = []
@@ -142,9 +142,33 @@ def list_dir_files(path: pathlib.Path) -> list[pathlib.Path]:
         with os.scandir(path) as pathIt:
             for pathObj in pathIt:
                 if pathObj.is_file():
-                    pathFiles.append(pathlib.Path(pathObj).name)
+                    pathFiles.append(pathlib.Path(pathObj))
 
     return pathFiles
+
+
+"""
+Finds a file for a given regex string
+Only returns the first occurence
+
+    Parameters:
+        path (pathlib.Path): path where to search
+        regString (str): regex string for matching <r"put-string-here">
+
+    Returns:
+        pathlib.Path: Path object for the found file
+"""
+def find_file(path: pathlib.Path, regString: str) -> pathlib.Path:
+    pathFiles = list_dir_files(path)
+    reString = re.compile(regString)
+
+    for file in pathFiles:
+        m = reString.match(file.name)
+
+        if m:
+            return file
+        
+    return
 
 
 ##################################################################

@@ -46,10 +46,9 @@ class SimpleDataStore:
     def list_IDs(self) -> list[int]:
         idFileIDs = self.__IDFile.read_IDs()
 
-        storeFiles = _filehelper.list_dir_files(self.__storePath)
         storeFileIDs = []
 
-        for fPath in storeFiles:
+        for fPath in _filehelper.list_dir_files(self.__storePath):
             curDescriptor = _filehelper.decode_filename(fPath)
             storeFileIDs.append(curDescriptor.ID)
 
@@ -109,8 +108,7 @@ class SimpleDataStore:
         ################################################################
         # ERROR: hash value of content is mismatched with filename
         # -> file gets removed from store
-        storeFiles = _filehelper.list_dir_files(self.__storePath)
-        for file in storeFiles:
+        for file in _filehelper.list_dir_files(self.__storePath):
             content = _filehelper.read_file_lines(file)
             curDescriptor = _filehelper.decode_filename(file)
 
@@ -121,9 +119,8 @@ class SimpleDataStore:
 
 
         # update ID file
-        storeFiles = _filehelper.list_dir_files(self.__storePath)
         newIDs = []
-        for file in storeFiles:
+        for file in _filehelper.list_dir_files(self.__storePath):
             curDescriptor = _filehelper.decode_filename(file)
             newIDs.append(curDescriptor.ID)
 
@@ -163,22 +160,72 @@ class SimpleDataStore:
         _filehelper.write_file(fDescriptor.filepath, content)
 
 
-    def delete_storage_file(self, id: int):
-        ...
-
+    """
+    Delete a file store object
     
+        Parameters:
+            id (int): ID of file store object to delete
+    """
+    def delete_storage_file(self, id: int):
+        ids = self.list_IDs()
+
+        if id not in ids:
+            raise ValueError("ID not in file store!")
+        
+        self.__IDFile.remove_ID(id)
+        storeFile = _filehelper.find_file(self.__storePath, str(id))
+
+        _filehelper.del_file(storeFile)
+
+
+    #####################################################################
+    ###################### STORAGE DATA OPERATIONS ######################
+    #####################################################################
+    """
+    Reads contents of a store file object
+
+        Parameters:
+            id (int): ID of store file object
+
+        Returns:
+            list[str]: content list from store file object
+    """
     def read_storage_data(self, id: int) -> list[str]:
-        ...
+        storeFile = _filehelper.find_file(self.__storePath, str(id))
+        fileContent = _filehelper.read_file_lines(storeFile)
+
+        return fileContent
 
 
+    """
+    Writes content to an existing store file object
+
+        Parameters:
+            id (int): ID of store file object to write to
+            content (list[str]): lines to write to store file
+    """
     def write_storage_data(self, id: int, content: list[str]):
-        ...
+        storeFile = _filehelper.find_file(self.__storePath, str(id))
+
+        _filehelper.write_file(storeFile, content)
 
 
+    """
+    Appends lines to an existing file store object
+
+        Parameters:
+            id (int): ID of store file object to append lines to
+            content (list[str]): lines to append to store file
+    """
     def append_storage_data(self, id: int, content: list[str]):
-        ...
+        storeFile = _filehelper.find_file(self.__storePath, str(id))
+        
+        _filehelper.append_file_lines(storeFile, content)
 
 
+    #####################################################################
+    ##################### STORAGE HELPER FUNCTIONS ######################
+    #####################################################################
     """
     Hashing function for each storage file object
     
