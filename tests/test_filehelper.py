@@ -185,6 +185,7 @@ def test_list_path_items(NewDirectory: pathlib.Path):
         _filehelper.create_file(NewDirectory, file)
 
     readFileList = _filehelper.list_dir_files(NewDirectory)
+    readFileList = [file.name for file in readFileList]
 
     # both lists should be sorted, input list may be not
     testFileList = sorted(testFileList)

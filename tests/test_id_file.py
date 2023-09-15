@@ -60,7 +60,7 @@ def test_write_IDs(TestPath: pathlib.Path, TestIDFile: _id_file.IDFile, TestIDs:
     idFilename = pathlib.Path("_ID.dat")
 
     for id in TestIDs:
-        TestIDFile.write_ID(id)
+        TestIDFile.add_ID(id)
 
     readIDs = _filehelper.read_file_lines(TestPath / idFilename)
     
@@ -72,7 +72,7 @@ def test_write_IDs(TestPath: pathlib.Path, TestIDFile: _id_file.IDFile, TestIDs:
 
     # also try writing an ID that already exist
     with pytest.raises(KeyError):
-        TestIDFile.write_ID(TestIDs[0])
+        TestIDFile.add_ID(TestIDs[0])
 
     _filehelper.del_path(TestPath)
 
@@ -80,7 +80,7 @@ def test_write_IDs(TestPath: pathlib.Path, TestIDFile: _id_file.IDFile, TestIDs:
 # test removing of IDs from file
 def test_remove_ID(TestPath: pathlib.Path, TestIDFile: _id_file.IDFile, TestIDs: list[int]):
     for id in TestIDs:
-        TestIDFile.write_ID(id)
+        TestIDFile.add_ID(id)
 
     removedIDs = TestIDs[0:2]
     remainingIDs = TestIDs[2:]
