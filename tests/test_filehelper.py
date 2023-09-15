@@ -236,4 +236,8 @@ def test_encode_decode_filename(NewDirectory: pathlib.Path):
     assert (ReadDescriptor.ID == TestDescriptor.ID)
     assert (ReadDescriptor.contentHash == TestDescriptor.contentHash)
 
+    with pytest.raises(ValueError):
+        ImpossibleDescriptor = _filehelper.decode_filename(
+            pathlib.Path("this-file-does-not-exist.dat"))
+
     _filehelper.del_path(NewDirectory)
