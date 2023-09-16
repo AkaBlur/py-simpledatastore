@@ -66,7 +66,7 @@ class IDFile:
     def remove_ID(self, id: int):
         ids = self.read_IDs()
 
-        if not id in ids:
+        if id not in ids:
             raise KeyError("ID not found in ID-File!")
         
         else:
@@ -79,7 +79,9 @@ class IDFile:
     Removes all IDs from the ID file
     """
     def purge_IDs(self):
-        _filehelper.write_file(self.__IDFile, [""])
+        # file has to be removed and then created new
+        _filehelper.del_file(self.__IDFile)
+        _filehelper.create_file(self.__storePath, self.__IDFile.name)
 
     
     """

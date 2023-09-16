@@ -40,7 +40,9 @@ def test_create_IDFile(TestPath: pathlib.Path):
 
 
 # test the reading of IDs from an ID file
-def test_read_IDs(TestPath: pathlib.Path, TestIDFile: _id_file.IDFile, TestIDs: list[int]):
+def test_read_IDs(TestPath: pathlib.Path,
+                  TestIDFile: _id_file.IDFile,
+                  TestIDs: list[int]):
     idFilename = pathlib.Path("_ID.dat")
 
     _filehelper.write_file(
@@ -56,7 +58,9 @@ def test_read_IDs(TestPath: pathlib.Path, TestIDFile: _id_file.IDFile, TestIDs: 
 
 
 # test the writing of IDs to the id file
-def test_write_IDs(TestPath: pathlib.Path, TestIDFile: _id_file.IDFile, TestIDs: list[int]):
+def test_write_IDs(TestPath: pathlib.Path,
+                   TestIDFile: _id_file.IDFile,
+                   TestIDs: list[int]):
     idFilename = pathlib.Path("_ID.dat")
 
     for id in TestIDs:
@@ -78,7 +82,9 @@ def test_write_IDs(TestPath: pathlib.Path, TestIDFile: _id_file.IDFile, TestIDs:
 
 
 # test removing of IDs from file
-def test_remove_ID(TestPath: pathlib.Path, TestIDFile: _id_file.IDFile, TestIDs: list[int]):
+def test_remove_ID(TestPath: pathlib.Path,
+                   TestIDFile: _id_file.IDFile,
+                   TestIDs: list[int]):
     for id in TestIDs:
         TestIDFile.add_ID(id)
 
@@ -97,5 +103,50 @@ def test_remove_ID(TestPath: pathlib.Path, TestIDFile: _id_file.IDFile, TestIDs:
 
     with pytest.raises(KeyError):
         TestIDFile.remove_ID(removedIDs[0])
+
+    _filehelper.del_path(TestPath)
+
+
+# test purging of IDs
+def test_purge_ids(TestPath: pathlib.Path,
+                   TestIDFile: _id_file.IDFile,
+                   TestIDs: list[int]):
+    for id in TestIDs:
+        TestIDFile.add_ID(id)
+
+    TestIDFile.purge_IDs()
+
+    readIDs = TestIDFile.read_IDs()
+
+    assert (len(readIDs) == 0)
+
+    _filehelper.del_path(TestPath)
+
+
+# test the integrity check of the ID file
+def test_check_integrity(TestPath: pathlib.Path,
+                         TestIDFile: _id_file.IDFile,
+                         TestIDs: list[int]):
+    for id in TestIDs:
+        TestIDFile.add_ID(id)
+
+    # add additional IDs that should not be addable
+    testIDFile = TestPath / pathlib.Path("_ID.dat")
+    additionalIDs = TestIDs[:2]
+    remainingIDs = TestIDs[2:]
+
+    # double IDs
+    _filehelper.append_file_lines(testIDFile, [str(id) for id in additionalIDs])
+    # triple IDs
+    _filehelper.append_file_lines(testIDFile, [str(id) for id in additionalIDs[:1]])
+
+    TestIDFile.check_integrity()
+    readIDs = TestIDFile.read_IDs()
+
+    # integrity check removes double IDs completely from the list
+    # so only non-double IDs are kept
+
+    assert (len(remainingIDs) == len(readIDs))
+    assert (set(remainingIDs) == set(remainingIDs))
 
     _filehelper.del_path(TestPath)
