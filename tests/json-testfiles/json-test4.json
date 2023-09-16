@@ -1,0 +1,22 @@
+{
+	"random": "73",
+	"random float": "2.296",
+	"bool": "true",
+	"date": "1992-01-10",
+	"regEx": "helloooooooooooooooooooooooooooooooooooooooooooooooooooooooooo world",
+	"enum": "online",
+	"firstname": "Michaelina",
+	"lastname": "Minetta",
+	"city": "Anadyr (town)",
+	"country": "Turkey",
+	"countryCode": "AO",
+	"email uses current data": "Michaelina.Minetta@gmail.com",
+	"email from expression": "Michaelina.Minetta@yopmail.com",
+	"array": [
+		"Belva",
+		"Eolanda",
+		"Dode",
+		"Nickie",
+		"Frieda"
+	]
+}

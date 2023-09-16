@@ -1,0 +1,22 @@
+{
+	"random": "84",
+	"random float": "78.574",
+	"bool": "false",
+	"date": "1995-02-02",
+	"regEx": "helloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo to you",
+	"enum": "online",
+	"firstname": "Nelle",
+	"lastname": "Dermott",
+	"city": "Bilbao",
+	"country": "American Samoa",
+	"countryCode": "SM",
+	"email uses current data": "Nelle.Dermott@gmail.com",
+	"email from expression": "Nelle.Dermott@yopmail.com",
+	"array": [
+		"Lynea",
+		"Wileen",
+		"Dione",
+		"Binny",
+		"Aili"
+	]
+}

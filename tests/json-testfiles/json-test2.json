@@ -1,0 +1,22 @@
+{
+	"random": "78",
+	"random float": "99.681",
+	"bool": "false",
+	"date": "1995-01-05",
+	"regEx": "hellooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo to you",
+	"enum": "generator",
+	"firstname": "Nita",
+	"lastname": "Montgomery",
+	"city": "Wichita",
+	"country": "Somalia",
+	"countryCode": "TZ",
+	"email uses current data": "Nita.Montgomery@gmail.com",
+	"email from expression": "Nita.Montgomery@yopmail.com",
+	"array": [
+		"Celene",
+		"Libbie",
+		"Babita",
+		"Alexine",
+		"Ardys"
+	]
+}

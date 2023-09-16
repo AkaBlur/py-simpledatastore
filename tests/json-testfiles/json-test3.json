@@ -1,0 +1,22 @@
+{
+	"random": "17",
+	"random float": "59.761",
+	"bool": "true",
+	"date": "1985-09-08",
+	"regEx": "helloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo to you",
+	"enum": "json",
+	"firstname": "Anallese",
+	"lastname": "Standing",
+	"city": "Malacca Town",
+	"country": "Saudi Arabia",
+	"countryCode": "NG",
+	"email uses current data": "Anallese.Standing@gmail.com",
+	"email from expression": "Anallese.Standing@yopmail.com",
+	"array": [
+		"Jere",
+		"Allis",
+		"Carol-Jean",
+		"Ardys",
+		"Beverley"
+	]
+}
