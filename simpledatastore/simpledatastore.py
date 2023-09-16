@@ -49,6 +49,10 @@ class SimpleDataStore:
         storeFileIDs = []
 
         for fPath in _filehelper.list_dir_files(self.__storePath):
+            # ID file has to be skipped
+            if fPath.name[0] == "_":
+                continue
+
             curDescriptor = _filehelper.decode_filename(fPath)
             storeFileIDs.append(curDescriptor.ID)
 
@@ -74,6 +78,9 @@ class SimpleDataStore:
         storeFileIDs = []
 
         for fPath in _filehelper.list_dir_files(self.__storePath):
+            if fPath.name[0] == "_":
+                continue
+
             curDescriptor = _filehelper.decode_filename(fPath)
             storeFileIDs.append(curDescriptor.ID)
 
@@ -98,9 +105,10 @@ class SimpleDataStore:
 
         ################################################################
         # ERROR: ID mismatch between ID file and store files
-        if not len(storeFileIDs) == len(idFileIDs) or set(storeFileIDs) == set(idFileIDs):
+        if (not len(storeFileIDs) == len(idFileIDs) or 
+            set(storeFileIDs) == set(idFileIDs)):
             # ID file has always priority
-            idToDelete = [id for id in storeFileIDs if not id in idFileIDs]
+            idToDelete = [id for id in storeFileIDs if id not in idFileIDs]
 
             self.__remove_file_by_id(idToDelete)
 
@@ -109,6 +117,9 @@ class SimpleDataStore:
         # ERROR: hash value of content is mismatched with filename
         # -> file gets removed from store
         for file in _filehelper.list_dir_files(self.__storePath):
+            if file.name[0] == "_":
+                continue
+
             content = _filehelper.read_file_lines(file)
             curDescriptor = _filehelper.decode_filename(file)
 
@@ -121,6 +132,9 @@ class SimpleDataStore:
         # update ID file
         newIDs = []
         for file in _filehelper.list_dir_files(self.__storePath):
+            if file.name[0] == "_":
+                continue
+            
             curDescriptor = _filehelper.decode_filename(file)
             newIDs.append(curDescriptor.ID)
 
@@ -156,7 +170,7 @@ class SimpleDataStore:
             contentHash = contentHash
         )
 
-        _filehelper.create_file(self.__storePath, fDescriptor.filepath.stem())
+        _filehelper.create_file(self.__storePath, fDescriptor.filepath.name)
         _filehelper.write_file(fDescriptor.filepath, content)
 
 
@@ -226,6 +240,7 @@ class SimpleDataStore:
     #####################################################################
     ##################### STORAGE HELPER FUNCTIONS ######################
     #####################################################################
+    # TODO: maybe move out of this class, no cohesion
     """
     Hashing function for each storage file object
     
@@ -251,6 +266,10 @@ class SimpleDataStore:
     """
     def __remove_file_by_id(self, idList: list[int]):
         for fPath in _filehelper.list_dir_files(self.__storePath):
+            # only decode if the file is not the ID file
+            if (fPath.name[0] == "_"):
+                continue
+
             curDesc = _filehelper.decode_filename(fPath)
 
             if curDesc.ID in idList:
