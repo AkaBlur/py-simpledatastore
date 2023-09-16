@@ -201,6 +201,33 @@ def test_list_path_items(NewDirectory: pathlib.Path):
     _filehelper.del_path(NewDirectory)
 
 
+# test for finding a file by regex expression
+def test_find_file(NewDirectory: pathlib.Path):
+    _filehelper.mkdir(NewDirectory)
+    testFilename = pathlib.Path("A_test_file_123.dat")
+
+    testFile = NewDirectory / testFilename
+
+    _filehelper.create_file(NewDirectory, testFilename)
+
+    # some regex tests
+    foundFile = _filehelper.find_file(NewDirectory, r".*test_file")
+    assert (foundFile == testFile)
+
+    foundFile = _filehelper.find_file(NewDirectory, r".*dat")
+    assert (foundFile == testFile)
+    
+    foundFile = _filehelper.find_file(NewDirectory, r"A_test")
+    assert (foundFile == testFile)
+    
+    foundFile = _filehelper.find_file(NewDirectory, r".*[123]+")
+    assert (foundFile == testFile)
+
+    # can't be found
+    foundFile = _filehelper.find_file(NewDirectory, r"_ID.*")
+    assert (not foundFile == testFile)
+
+
 # check encoding and decoding of filename structure
 def test_encode_decode_filename(NewDirectory: pathlib.Path):
     testID = 12
