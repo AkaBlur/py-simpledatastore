@@ -1,0 +1,22 @@
+{
+	"random": "11",
+	"random float": "95.398",
+	"bool": "true",
+	"date": "1987-06-16",
+	"regEx": "hellooooooooooooooooooooooooooooooooooooooooooooooo to you",
+	"enum": "generator",
+	"firstname": "Jillayne",
+	"lastname": "Skurnik",
+	"city": "Miri",
+	"country": "Indonesia",
+	"countryCode": "KY",
+	"email uses current data": "Jillayne.Skurnik@gmail.com",
+	"email from expression": "Jillayne.Skurnik@yopmail.com",
+	"array": [
+		"Annora",
+		"Dagmar",
+		"Rori",
+		"Felice",
+		"Dacia"
+	]
+}
