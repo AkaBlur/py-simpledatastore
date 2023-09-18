@@ -23,7 +23,7 @@ Verification of the storage content is done via simple MD5 hashes. <br>
 
 ### Content
 - Currently only `string` is supported
-- One `ID` can only have one specific `string`-list as content
+- One `ID` can only have one specific `string`-list as content <br>
   :point_right: No Duplicates with the same `ID` are allowed!
 
 ### Storage Integrity
