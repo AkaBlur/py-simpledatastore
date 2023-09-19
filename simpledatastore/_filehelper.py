@@ -123,6 +123,19 @@ def del_path(path: pathlib.Path):
         shutil.rmtree(path)
 
 
+"""
+Renames an existing file
+
+    Parameters:
+        oldName (pathlib.Path): old filename (file has to exist)
+        newName (pathlib.Path): new filename
+            ! files have to be in same directory !
+"""
+def rename_file(oldName: pathlib.Path, newName: pathlib.Path):
+    if oldName.exists() and oldName.is_file():
+        os.rename(oldName, newName)
+
+
 ##################################################################
 #################### FILE AND DIRECTORY STAT #####################
 ##################################################################
