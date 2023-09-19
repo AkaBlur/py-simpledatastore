@@ -220,8 +220,15 @@ class SimpleDataStore:
     """
     def write_storage_data(self, id: int, content: list[str]):
         storeFile = _filehelper.find_file(self.__storePath, str(id))
+        newHash = self.calc_hash(content = content)
+        newFDescriptor = _filehelper.encode_filename(
+            self.__storePath,
+            id = id,
+            contentHash = newHash
+        )
 
         _filehelper.write_file(storeFile, content)
+        _filehelper.rename_file(storeFile, newFDescriptor.filepath)
 
 
     """
@@ -233,8 +240,17 @@ class SimpleDataStore:
     """
     def append_storage_data(self, id: int, content: list[str]):
         storeFile = _filehelper.find_file(self.__storePath, str(id))
-        
         _filehelper.append_file_lines(storeFile, content)
+
+        newContent = _filehelper.read_file_lines(storeFile)
+        newHash = self.calc_hash(newContent)
+        newFDescriptor = _filehelper.encode_filename(
+            self.__storePath,
+            id = id,
+            contentHash = newHash
+        )
+
+        _filehelper.rename_file(storeFile, newFDescriptor.filepath)
 
 
     #####################################################################

@@ -210,14 +210,26 @@ def test_read_storage_data(TestPath: pathlib.Path,
 def test_write_storage_data(TestPath: pathlib.Path,
                             TestDataStore: simpledatastore.SimpleDataStore,
                             TestStoreFiles: list[TestDataFile]):
-    TestDataStore.add_storage_file(TestStoreFiles[0].id,
-                                    TestStoreFiles[0].content)
+    TestFile = TestStoreFiles[0]
+
+    TestDataStore.add_storage_file(TestFile.id,
+                                    TestFile.content)
     
     anotherContent = TestStoreFiles[1].content
 
-    TestDataStore.write_storage_data(TestStoreFiles[0].id,
+    TestDataStore.write_storage_data(TestFile.id,
                                      anotherContent)
-    readContent = TestDataStore.read_storage_data(TestStoreFiles[0].id)
+    NewFDescriptor = _filehelper.encode_filename(
+        TestPath,
+        TestFile.id,
+        TestDataStore.calc_hash(anotherContent)
+    )
+
+    readFile = _filehelper.find_file(TestPath, NewFDescriptor.filepath.name)
+
+    assert (readFile.exists() and readFile.is_file())
+
+    readContent = TestDataStore.read_storage_data(TestFile.id)
 
     assert (len(anotherContent) == len(readContent))
     assert (set(anotherContent) == set(readContent))
@@ -229,16 +241,26 @@ def test_write_storage_data(TestPath: pathlib.Path,
 def test_append_storage_data(TestPath: pathlib.Path,
                              TestDataStore: simpledatastore.SimpleDataStore,
                              TestStoreFiles: list[TestDataFile]):
-    TestDataStore.add_storage_file(TestStoreFiles[0].id,
-                                    TestStoreFiles[0].content)
+    TestFile = TestStoreFiles[0]
+    TestDataStore.add_storage_file(TestFile.id,
+                                    TestFile.content)
     
     anotherContent = TestStoreFiles[1].content
+    testContent = TestFile.content + anotherContent
 
-    TestDataStore.append_storage_data(TestStoreFiles[0].id,
+    TestDataStore.append_storage_data(TestFile.id,
                                       anotherContent)
-    readContent = TestDataStore.read_storage_data(TestStoreFiles[0].id)
+    NewFDescriptor = _filehelper.encode_filename(
+        TestPath,
+        TestFile.id,
+        TestDataStore.calc_hash(testContent)
+    )
 
-    testContent = TestStoreFiles[0].content + anotherContent
+    readFile = _filehelper.find_file(TestPath, NewFDescriptor.filepath.name)
+
+    assert (readFile.exists() and readFile.is_file())
+
+    readContent = TestDataStore.read_storage_data(TestFile.id)
 
     assert (len(testContent) == len(readContent))
     assert (set(testContent) == set(readContent))

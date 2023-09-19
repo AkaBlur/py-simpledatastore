@@ -227,6 +227,76 @@ def test_find_file(NewDirectory: pathlib.Path):
     foundFile = _filehelper.find_file(NewDirectory, r"_ID.*")
     assert (not foundFile == testFile)
 
+    _filehelper.del_path(NewDirectory)
+
+
+# test file deletion
+def test_delete_file(NewDirectory: pathlib.Path):
+    _filehelper.mkdir(NewDirectory)
+    testFiles = [
+        "test1.dat",
+        "test2.dat",
+        "test3.dat",
+        "test4.dat"
+    ]
+
+    for file in testFiles:
+        _filehelper.create_file(NewDirectory,
+                                pathlib.Path(file))
+
+    removedFiles = testFiles[:2]
+    remainFiles = testFiles[2:]
+
+    for file in removedFiles:
+        _filehelper.del_file(NewDirectory / pathlib.Path(file))
+
+    readFiles = _filehelper.list_dir_files(NewDirectory)
+    readFiles = [file.name for file in readFiles]
+
+    assert (len(readFiles) == len(remainFiles))
+    assert (set(readFiles) == set(remainFiles))
+
+    _filehelper.del_path(NewDirectory)
+
+
+# test file renaming
+def test_rename_file(NewDirectory: pathlib.Path):
+    _filehelper.mkdir(NewDirectory)
+    startFiles = [
+        "test1.dat",
+        "test2.dat",
+        "test3.dat",
+        "test4.dat"
+    ]
+
+    renamedFiles = [
+        "Renamed4.dat",
+        "Renamed3.dat",
+        "Renamed2.dat",
+        "Renamed1.dat"
+    ]
+
+    for file in startFiles:
+        _filehelper.create_file(NewDirectory,
+                                pathlib.Path(file))
+        
+    for i, file in enumerate(renamedFiles):
+        oldFile = NewDirectory / pathlib.Path(startFiles[i])
+        newFile = NewDirectory / pathlib.Path(file)
+
+        _filehelper.rename_file(oldFile, newFile)
+
+    readFiles = _filehelper.list_dir_files(NewDirectory)
+    readFiles = [file.name for file in readFiles]
+
+    for file in readFiles:
+        assert (file not in startFiles)
+
+    assert (len(readFiles) == len(renamedFiles))
+    assert (set(readFiles) == set(renamedFiles))
+
+    _filehelper.del_path(NewDirectory)
+
 
 # check encoding and decoding of filename structure
 def test_encode_decode_filename(NewDirectory: pathlib.Path):
