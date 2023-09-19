@@ -87,10 +87,10 @@ SimpleDataStore.read_storage_data(id: int) -> list[str]
 **Writing data** <br>
 Writes data to a storage file.
 ```python
-SimpleDataStore.write_storage_file(id: int, content: list[str])
+SimpleDataStore.write_storage_data(id: int, content: list[str])
 ```
 **Appending data** <br>
 Appends data to already existing data into a storage file.
 ```python
-SimpleDataStore.append_storage_file(id: int, content: list[str])
+SimpleDataStore.append_storage_data(id: int, content: list[str])
 ```
