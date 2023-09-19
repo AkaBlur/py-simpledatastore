@@ -261,6 +261,7 @@ def test_delete_file(NewDirectory: pathlib.Path):
 
 # test file renaming
 def test_rename_file(NewDirectory: pathlib.Path):
+    _filehelper.mkdir(NewDirectory)
     startFiles = [
         "test1.dat",
         "test2.dat",
@@ -279,13 +280,14 @@ def test_rename_file(NewDirectory: pathlib.Path):
         _filehelper.create_file(NewDirectory,
                                 pathlib.Path(file))
         
-    for i, file in renamedFiles:
+    for i, file in enumerate(renamedFiles):
         oldFile = NewDirectory / pathlib.Path(startFiles[i])
         newFile = NewDirectory / pathlib.Path(file)
 
         _filehelper.rename_file(oldFile, newFile)
 
     readFiles = _filehelper.list_dir_files(NewDirectory)
+    readFiles = [file.name for file in readFiles]
 
     for file in readFiles:
         assert (file not in startFiles)
