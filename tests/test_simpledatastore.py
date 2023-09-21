@@ -90,6 +90,60 @@ def test_create_store(TestPath: pathlib.Path,
     _filehelper.del_path(TestPath)
 
 
+# test loading a store that is already stored on disk
+def test_create_existing_store(TestPath: pathlib.Path,
+                               TestDataStore: simpledatastore.SimpleDataStore,
+                               TestStoreFiles: list[TestDataFile]):
+    testIDs = [file.id for file in TestStoreFiles]
+    
+    # store is created when passing the fixture
+    for file in TestStoreFiles:
+        TestDataStore.add_storage_file(file.id,
+                                       file.content)
+        
+    # simulating a new storage
+    newStore = simpledatastore.SimpleDataStore(TestPath)
+
+    # check existing ID file
+    idFile = TestPath / pathlib.Path("_ID.dat")
+    assert (idFile and idFile.exists() and idFile.is_file())
+
+    # check IDs inside ID file
+    idFileEntries = [
+        int(id) for id in _filehelper.read_file_lines(idFile)
+    ]
+
+    assert (len(testIDs) == len(idFileEntries))
+    assert (set(testIDs) == set(idFileEntries))
+
+    # check file IDs and hashes
+    storeFiles = [
+        path for path in _filehelper.list_dir_files(TestPath)
+        if not path.name[0] == "_"
+    ]
+
+    for file in storeFiles:
+        curDescriptor = _filehelper.decode_filename(file)
+
+        # find the matching ID in testing set
+        testEntry = [
+            test for test in TestStoreFiles
+            if curDescriptor.ID == test.id
+        ]
+        assert (len(testEntry) == 1)
+
+        testEntry = testEntry[0]
+        
+        # calculate hash from test data
+        testHash = newStore.calc_hash(testEntry.content)
+
+        # check ID and hash against test data
+        assert (curDescriptor.ID == testEntry.id)
+        assert (curDescriptor.contentHash == testHash)
+
+    _filehelper.del_path(TestPath)
+
+
 # tests deletion of the store
 def test_del_store(TestPath: pathlib.Path,
                    TestDataStore: simpledatastore.SimpleDataStore):
