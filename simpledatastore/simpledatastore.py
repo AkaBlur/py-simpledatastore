@@ -12,6 +12,7 @@ Identification for each stored object is via IDs
 IDs are NOT generated
     -> tracking of which ID can be used should be done manually
 Data validation is done via simple MD5 hashes
+If the path contains an ID file it is loaded instead of creating a new one.
 
     Parameters:
         path (pathlib.Path): storage path for the data store
@@ -27,7 +28,16 @@ class SimpleDataStore:
         self.__storePath = path
 
         _filehelper.mkdir(path)
-        self.__IDFile = _id_file.IDFile(self.__storePath)
+
+        fPath = _filehelper.find_file(path, r"_ID.dat")
+
+        if fPath and fPath.exists() and fPath.is_file():
+            self.__IDFile = _id_file.IDFile(self.__storePath)
+            self.__IDFile.check_integrity()
+            self.check_integrity()
+
+        else:
+            self.__IDFile = _id_file.IDFile(self.__storePath)
 
 
     """
